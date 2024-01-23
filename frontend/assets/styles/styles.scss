@@ -1,0 +1,7 @@
+.text-truncate {
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    word-break: normal !important;
+    max-width: 65px !important;
+}
