@@ -3,7 +3,7 @@
         <div id="nav_left">
             <h1 id="nav_brandname">MusicStreaming</h1>
             <nav class="ms-3">
-                <v-btn flat>
+                <v-btn href="/" flat>
                     <v-icon start icon="mdi-home"></v-icon>
                     Home
                 </v-btn>
