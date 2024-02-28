@@ -3,12 +3,13 @@ package jwt_manager
 import (
 	"errors"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/hako/durafmt"
 	"time"
 )
 
 var JwtAlgorithm = jwt.SigningMethodHS512
 
-// define errors.
+// define errors
 var (
 	ErrInvalidToken            = errors.New("invalid token")
 	ErrInvalidTokenType        = errors.New("invalid token type")
@@ -27,10 +28,15 @@ type JwtManager struct {
 	ttl       time.Duration
 }
 
-func NewJwtManager(secretKey string, expire time.Duration) *JwtManager {
+func NewJwtManager(secretKey string, expire string) *JwtManager {
+	expireDuration, parseErr := durafmt.ParseStringShort(expire)
+	if parseErr != nil {
+		panic(parseErr)
+	}
+
 	return &JwtManager{
 		secretKey: secretKey,
-		ttl:       expire,
+		ttl:       expireDuration.Duration(),
 	}
 }
 

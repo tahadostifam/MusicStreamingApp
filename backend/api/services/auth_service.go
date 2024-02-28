@@ -1,24 +1,33 @@
 package services
 
-import "github.com/tahadostifam/MusicStreamingApp/api/models"
+import (
+	"errors"
+	"github.com/tahadostifam/MusicStreamingApp/api/models"
+	"github.com/tahadostifam/MusicStreamingApp/api/repository/auth"
+	"github.com/tahadostifam/MusicStreamingApp/pkg/encrypt_password"
+)
 
-type AuthService struct{}
+var ErrIncorrectPassword = errors.New("incorrect password")
 
-func NewAuthController() *AuthService {
-	return &AuthService{}
+type AuthService struct {
+	authRepo auth.Repository
 }
 
-func (c AuthService) HandleSignin(email string) (err error, code int) {
-	//TODO implement me
-	panic("implement me")
+func NewAuthService(authRepo auth.Repository) *AuthService {
+	return &AuthService{authRepo}
 }
 
-func (c AuthService) HandleLogout(token string) error {
-	//TODO implement me
-	panic("implement me")
-}
+func (c AuthService) GetUser(email, password string) (*models.User, error) {
+	user, err := c.authRepo.FindBy(email)
+	if err != nil && user != nil {
+		return nil, err
+	}
 
-func (c AuthService) HandleAuthentication(token string) (error, models.UserModel) {
-	//TODO implement me
-	panic("implement me")
+	// validating entered password
+	isValid := encrypt_password.CheckPassword(password, user.Password)
+	if isValid {
+		return user, nil
+	}
+
+	return nil, ErrIncorrectPassword
 }

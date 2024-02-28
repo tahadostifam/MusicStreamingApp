@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: "music_streaming_app_postgres_db"
+    image: "postgres"
+    environment:
+        POSTGRES_PASSWORD: "admin"
+    network_mode: "host"
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin
+  app:
+    container_name: "music_streaming_app"
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    image: "golang:latest"
+    ports:
+      - "8000:8000"
+
+networks:
+  default:
+    name: music_streaming_app_default_network
