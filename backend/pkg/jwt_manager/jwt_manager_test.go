@@ -1,22 +1,24 @@
 package jwt_manager
 
 import (
-	"testing"
-
-	"github.com/kavkaco/Kavka-Core/config"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"testing"
 )
 
-var jwtManager = NewJwtManager(config.Auth{SECRET: "sample_secret"}, DEFAULT_OTP_EXPIRE)
+const JwtDefaultDuration = "5s"
+
+var jwtManager = NewJwtManager("sample_secret", JwtDefaultDuration)
+
+const TokenType = "access_token"
 
 var StaticID = primitive.NewObjectID()
 
-func TestJWTGenerateAndVerifyRefreshToken(t *testing.T) {
-	refreshToken, tokenErr := jwtManager.Generate(RefreshToken, StaticID)
+func TestJWTGenerateAndVerifyAccessToken(t *testing.T) {
+	token, tokenErr := jwtManager.Generate(TokenType, StaticID.String())
 
 	assert.Empty(t, tokenErr)
-	assert.NotEmpty(t, refreshToken)
+	assert.NotEmpty(t, token)
 
 	cases := []struct {
 		name  string
@@ -25,7 +27,7 @@ func TestJWTGenerateAndVerifyRefreshToken(t *testing.T) {
 	}{
 		{
 			name:  "valid",
-			token: refreshToken,
+			token: token,
 			err:   nil,
 		},
 		{
@@ -37,7 +39,7 @@ func TestJWTGenerateAndVerifyRefreshToken(t *testing.T) {
 
 	for _, tt := range cases {
 		t.Run(tt.name, func(t *testing.T) {
-			_, verifyErr := jwtManager.Verify(tt.token, RefreshToken)
+			_, verifyErr := jwtManager.Verify(tt.token, TokenType)
 
 			assert.Equal(t, verifyErr, tt.err)
 		})

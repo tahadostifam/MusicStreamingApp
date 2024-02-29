@@ -28,8 +28,8 @@ func (c *AuthController) HandleSignin(ctx *gin.Context) {
 	}
 
 	// everything is ok from client side
-	c.jwtManager.
-		presenters.SendUser(ctx, user)
+	//c.jwtManager.
+	presenters.SendUser(ctx, user)
 }
 
 func (c *AuthController) HandleLogout(ctx *gin.Context) {

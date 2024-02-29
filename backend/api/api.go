@@ -24,7 +24,7 @@ func InitApi(host string, port int, db *gorm.DB, config *config.Config) error {
 	// initialize controllers
 	authController := controllers.NewAuthController(jwtManager, authService)
 
-	app.GET("/", authController.HandleSignin)
+	app.POST("/signin", authController.HandleSignin)
 
 	err := app.Run(fmt.Sprintf("%v:%v", host, port))
 	if err != nil {

@@ -2,6 +2,7 @@ package jwt_manager
 
 import (
 	"errors"
+	"fmt"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/hako/durafmt"
 	"time"
@@ -20,7 +21,7 @@ type JwtClaims struct {
 	TokenType string
 	UserID    string
 	CreatedAt time.Time
-	jwt.Claims
+	jwt.RegisteredClaims
 }
 
 type JwtManager struct {
@@ -40,15 +41,19 @@ func NewJwtManager(secretKey string, expire string) *JwtManager {
 	}
 }
 
-func (m *JwtManager) Generate(tokenType string, userID string) (string, error) {
-	createdAt := time.Now()
-	claims := &JwtClaims{UserID: userID, CreatedAt: createdAt}
-
-	token := jwt.NewWithClaims(JwtAlgorithm, claims)
-	return token.SignedString([]byte(m.secretKey))
+func (s JwtManager) sampleGo() {
+	fmt.Println("Hello")
 }
 
-func (m *JwtManager) Verify(userToken string, tokenType string) (*JwtClaims, error) {
+func (s JwtManager) Generate(tokenType string, userID string) (string, error) {
+	createdAt := time.Now()
+	claims := &JwtClaims{UserID: userID, CreatedAt: createdAt, TokenType: tokenType}
+
+	token := jwt.NewWithClaims(JwtAlgorithm, claims)
+	return token.SignedString([]byte(s.secretKey))
+}
+
+func (c JwtManager) Verify(userToken string, tokenType string) (*JwtClaims, error) {
 	claims := &JwtClaims{}
 
 	token, err := jwt.ParseWithClaims(userToken, claims,
@@ -57,7 +62,7 @@ func (m *JwtManager) Verify(userToken string, tokenType string) (*JwtClaims, err
 				return nil, ErrUnexpectedSigningMethod
 			}
 
-			return []byte(m.secretKey), nil
+			return []byte(c.secretKey), nil
 		},
 	)
 	if err != nil {
