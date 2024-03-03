@@ -12,6 +12,9 @@ type User struct {
 	Name       string
 	Email      string `gorm:"unique"`
 	Password   string `gorm:"not null"`
+
+	Musics []Music `gorm:"foreignKey:ArtistID;references:UserID"`
+	Likes  []User  `gorm:"many2many:user_likes;foreignKey:UserID;joinForeignKey:MusicID;"`
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {

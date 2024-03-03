@@ -1,8 +1,10 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Comment struct {
@@ -10,7 +12,7 @@ type Comment struct {
 	CommentID  string        `gorm:"not null;unique"`
 	Content    string        `gorm:"not null"`
 	Date       time.Duration `gorm:"not null"`
-	Likes      []User        // References to UserID
-	UserID     User          `gorm:"not null"` // Foreign key for User
-	MusicID    Music         `gorm:"not null"` // Foreign key for Music
+	UserID     uuid.UUID     `gorm:"not null"` // Foreign key for User
+	MusicID    uuid.UUID     `gorm:"not null"` // Foreign key for Music
+	// Likes      []User        // References to UserID
 }

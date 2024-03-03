@@ -1,11 +1,12 @@
 package database
 
 import (
+	"sync"
+
 	"github.com/tahadostifam/MusicStreamingApp/api/models"
 	postgres "gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"sync"
 )
 
 var (
@@ -16,7 +17,7 @@ var (
 // This function is used to migrate all the tables that is defined in models and if it fails it should panic the process because database tables are one
 // of the most low level services that is necessary for other services in runtime.
 func migrateTables(db *gorm.DB) {
-	migrateErr := db.AutoMigrate(&models.User{})
+	migrateErr := db.AutoMigrate(&models.User{}, &models.Music{}, &models.Comment{})
 	if migrateErr != nil {
 		panic(migrateErr)
 	}
