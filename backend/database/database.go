@@ -51,7 +51,7 @@ func Connect(dsn string) *gorm.DB {
 }
 
 func CreateTestDatabase() *gorm.DB {
-	config := &gorm.Config{}
+	config := &gorm.Config{TranslateError: true}
 
 	db, err := gorm.Open(sqlite.Open("file::memory:?cache=shared"), config)
 	if err != nil {
