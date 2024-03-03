@@ -22,12 +22,6 @@ func (r *Repository) Create(name, email, password string) (*models.User, error) 
 	obj := models.User{Name: name, Email: email, Password: password}
 	result := r.db.Create(&obj)
 
-	// var pErr *pgconn.PgError
-	// errors.As(result.Error, &pErr)
-
-	// if pErr.Code == "23505" { // check for duplicate key error
-	// 	return nil, ErrEmailAlreadyExist
-	// }
 	if errors.Is(result.Error, gorm.ErrDuplicatedKey) {
 		return nil, ErrEmailAlreadyExist
 	} else if result.Error != nil {
