@@ -26,6 +26,7 @@ func InitApi(host string, port int, db *gorm.DB, config *config.Config) error {
 
 	app.POST("/signin", authController.HandleSignin)
 	app.POST("/signup", authController.HandleSignup)
+	app.POST("/authentication", authController.HandleAuthentication)
 
 	err := app.Run(fmt.Sprintf("%v:%v", host, port))
 	if err != nil {

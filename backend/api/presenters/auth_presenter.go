@@ -13,6 +13,15 @@ type UserDto struct {
 	User    *models.User `json:"user"`
 }
 
+func Unauthorized(ctx *gin.Context) {
+	code := http.StatusUnauthorized
+
+	ctx.JSON(code, JsonMessage{
+		Code:    401,
+		Message: "Unauthorized",
+	})
+}
+
 func IncorrectPassword(ctx *gin.Context) {
 	code := http.StatusUnauthorized
 

@@ -22,20 +22,21 @@ func (s *MyTestSuite) SetupSuite() {
 
 	// define a sample information for our user!
 	s.sampleUser = models.User{
+		Name:     "Sample",
 		Email:    "sample@mail.com",
 		Password: "1234",
 	}
 }
 
 func (s *MyTestSuite) TestA_Create() {
-	user, err := s.authRepo.Create(s.sampleUser.Email, s.sampleUser.Password)
+	user, err := s.authRepo.Create(s.sampleUser.Name, s.sampleUser.Email, s.sampleUser.Password)
 
 	assert.NoError(s.T(), err)
 	assert.NotEmpty(s.T(), user)
 }
 
 func (s *MyTestSuite) TestB_FindBy() {
-	user, err := s.authRepo.FindBy(s.sampleUser.Email)
+	user, err := s.authRepo.FindByEmail(s.sampleUser.Email)
 
 	assert.NoError(s.T(), err)
 	assert.NotEmpty(s.T(), user)

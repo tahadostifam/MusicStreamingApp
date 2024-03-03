@@ -17,8 +17,8 @@ func NewAuthService(authRepo auth.Repository) *AuthService {
 	return &AuthService{authRepo}
 }
 
-func (c AuthService) GetUser(email, password string) (*models.User, error) {
-	user, err := c.authRepo.FindBy(email)
+func (c AuthService) AuthenticateUser(email, password string) (*models.User, error) {
+	user, err := c.authRepo.FindByEmail(email)
 	if err != nil && user != nil {
 		return nil, err
 	}
@@ -30,6 +30,15 @@ func (c AuthService) GetUser(email, password string) (*models.User, error) {
 	}
 
 	return nil, ErrIncorrectPassword
+}
+
+func (c AuthService) FetchByUserID(userID string) (*models.User, error) {
+	user, err := c.authRepo.FindByUserID(userID)
+	if err != nil && user != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
 func (c AuthService) CreateUser(name, email, password string) (*models.User, error) {

@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+
 	"github.com/gin-gonic/gin"
 	"github.com/tahadostifam/MusicStreamingApp/api/dto"
 	"github.com/tahadostifam/MusicStreamingApp/api/presenters"
@@ -12,6 +13,8 @@ import (
 
 // AccessToken is the token type of jwt_manager lib
 var AccessToken = "token"
+
+const AuthenticationHeaderKey = "authentication"
 
 type AuthController struct {
 	jwtManager  *jwt_manager.JwtManager
@@ -29,7 +32,7 @@ func (c *AuthController) HandleSignin(ctx *gin.Context) {
 		email := body.Email
 		password := body.Password
 
-		user, err := c.authService.GetUser(email, password)
+		user, err := c.authService.AuthenticateUser(email, password)
 		if err != nil {
 			presenters.IncorrectPassword(ctx)
 			return
@@ -42,10 +45,12 @@ func (c *AuthController) HandleSignin(ctx *gin.Context) {
 			return
 		}
 
-		ctx.Header("authentication", token)
+		ctx.Header(AuthenticationHeaderKey, token)
 
 		presenters.SendUser(ctx, user)
 	}
+
+	ctx.Next()
 }
 
 func (c *AuthController) HandleSignup(ctx *gin.Context) {
@@ -74,18 +79,32 @@ func (c *AuthController) HandleSignup(ctx *gin.Context) {
 			return
 		}
 
-		ctx.Header("authentication", token)
+		ctx.Header(AuthenticationHeaderKey, token)
 
 		presenters.SendUser(ctx, user)
 	}
-}
 
-func (c *AuthController) HandleLogout(ctx *gin.Context) {
-	//TODO implement me
-	panic("implement me")
+	ctx.Next()
 }
 
 func (c *AuthController) HandleAuthentication(ctx *gin.Context) {
-	//TODO implement me
-	panic("implement me")
+	accessToken := ctx.GetHeader(AuthenticationHeaderKey)
+
+	if len(accessToken) > 0 {
+		claims, err := c.jwtManager.Verify(accessToken, AccessToken)
+
+		if err == nil && claims != nil {
+			user, fetchErr := c.authService.FetchByUserID(claims.UserID)
+			if fetchErr != nil {
+				presenters.Unauthorized(ctx)
+				return
+			}
+
+			presenters.SendUser(ctx, user)
+		} else {
+			presenters.Unauthorized(ctx)
+		}
+	}
+
+	ctx.Next()
 }

@@ -35,9 +35,18 @@ func (r *Repository) Create(name, email, password string) (*models.User, error) 
 	return &obj, nil
 }
 
-func (r *Repository) FindBy(email string) (*models.User, error) {
+func (r *Repository) FindByEmail(email string) (*models.User, error) {
 	user := &models.User{}
 	obj := r.db.Where("email = ?", email).Find(&user)
+	if obj.Error != nil {
+		return nil, ErrUserNotFound
+	}
+
+	return user, nil
+}
+func (r *Repository) FindByUserID(userID string) (*models.User, error) {
+	user := &models.User{}
+	obj := r.db.Where("user_id = ?", userID).Find(&user)
 	if obj.Error != nil {
 		return nil, ErrUserNotFound
 	}
@@ -56,7 +65,7 @@ func (r *Repository) Delete(email string) error {
 }
 
 func (r *Repository) Update(email string, newName, newPassword string) (*models.User, error) {
-	user, err := r.FindBy(email)
+	user, err := r.FindByEmail(email)
 	if err != nil {
 		return nil, ErrUserNotFound
 	}
