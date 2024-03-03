@@ -14,7 +14,7 @@ type UserDto struct {
 }
 
 func IncorrectPassword(ctx *gin.Context) {
-	code := http.StatusBadRequest
+	code := http.StatusUnauthorized
 
 	ctx.JSON(code, JsonMessage{
 		Code:    401,
@@ -27,5 +27,12 @@ func SendUser(ctx *gin.Context, user *models.User) {
 		Message: "Success",
 		Code:    200,
 		User:    user,
+	})
+}
+
+func EmailAlreadyExist(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, JsonMessage{
+		Message: "Another account already exists with the same email address",
+		Code:    409, // conflict
 	})
 }

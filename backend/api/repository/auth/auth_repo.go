@@ -2,11 +2,13 @@ package auth
 
 import (
 	"errors"
+	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/tahadostifam/MusicStreamingApp/api/models"
 	"gorm.io/gorm"
 )
 
 var ErrUserNotFound = errors.New("user not found")
+var ErrEmailAlreadyExist = errors.New("email already exist")
 
 type Repository struct {
 	db *gorm.DB
@@ -16,9 +18,16 @@ func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{db}
 }
 
-func (r *Repository) Create(email, password string) (*models.User, error) {
-	obj := models.User{Email: email, Password: password}
+func (r *Repository) Create(name, email, password string) (*models.User, error) {
+	obj := models.User{Name: name, Email: email, Password: password}
 	result := r.db.Create(&obj)
+
+	var pErr *pgconn.PgError
+	errors.As(result.Error, &pErr)
+
+	if pErr.Code == "23505" { // check for duplicate key error
+		return nil, ErrEmailAlreadyExist
+	}
 	if result.Error != nil {
 		return nil, result.Error
 	}

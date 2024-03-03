@@ -58,5 +58,10 @@ func Validate[Dto interface{}](ctx *gin.Context) *Dto {
 		return nil
 	}
 
+	if body == nil {
+		presenters.BadRequest(ctx)
+		return nil
+	}
+
 	return body
 }

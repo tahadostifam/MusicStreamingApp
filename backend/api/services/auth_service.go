@@ -31,3 +31,12 @@ func (c AuthService) GetUser(email, password string) (*models.User, error) {
 
 	return nil, ErrIncorrectPassword
 }
+
+func (c AuthService) CreateUser(name, email, password string) (*models.User, error) {
+	user, err := c.authRepo.Create(name, email, password)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
