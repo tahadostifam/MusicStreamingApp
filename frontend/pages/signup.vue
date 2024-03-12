@@ -5,14 +5,16 @@
                 <v-toolbar-title>Signin</v-toolbar-title>
             </v-toolbar>
             <v-form class="py-3 ">
+                <v-text-field flat label="Name" variant="solo" placeholder="Enter your name..."></v-text-field>
                 <v-text-field flat label="Email" variant="solo" placeholder="Enter your email..."></v-text-field>
-                <v-text-field flat type="password" label="Password" variant="solo" placeholder="Enter your password..."></v-text-field>
+                <v-text-field flat type="password" label="Password" variant="solo"
+                    placeholder="Enter your password..."></v-text-field>
                 <v-checkbox color="primary" label="Remember me"></v-checkbox>
-                <v-btn size="large" color="primary" variant="tonal" block>Signin</v-btn>
+                <v-btn size="large" color="primary" variant="tonal" block>Signup</v-btn>
 
                 <v-divider class="my-4"></v-divider>
 
-                <v-btn flat block href="/signup">Signup</v-btn>
+                <v-btn flat block to="/signin">Signin</v-btn>
             </v-form>
         </v-card>
     </v-container>

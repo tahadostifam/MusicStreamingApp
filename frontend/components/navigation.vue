@@ -24,7 +24,16 @@
                 <v-img alt="Avatar" src="https://avatars.githubusercontent.com/u/72092675?v=4"></v-img>
             </v-avatar>
 
-            <v-btn class="ms-3" variant="tonal" icon="mdi-dots-horizontal"></v-btn>
+            <v-btn class="ms-3" rounded="lg" size="45" variant="tonal">
+                <v-icon start icon="mdi-dots-horizontal"></v-icon>
+
+                <v-menu width="170" activator="parent">
+                    <v-list>
+                        <v-list-item to="/dashboard"><v-list-item-title>Profile</v-list-item-title></v-list-item>
+                        <v-list-item to="/logout"><v-list-item-title>Log out</v-list-item-title></v-list-item>
+                    </v-list>
+                </v-menu>
+            </v-btn>
         </div>
     </v-app-bar>
 </template>

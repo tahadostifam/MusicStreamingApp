@@ -1,7 +1,21 @@
 .text-truncate {
-    overflow: hidden !important;
-    white-space: nowrap !important;
-    text-overflow: ellipsis !important;
-    word-break: normal !important;
-    max-width: 65px !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  word-break: normal !important;
+  max-width: 65px !important;
 }
+
+.dashboard_contianer {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%);
+  width: 1200px;
+  @media screen and (max-width: 1250px) {
+    width: 900px;
+  }
+  @media screen and (max-width: 950px) {
+    width: 98%;
+  }
+}
+
