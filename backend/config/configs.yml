@@ -18,5 +18,5 @@ smtp:
   from: ""
 minio:
   endpoint: 127.0.0.1:9000
-  access_key: ""
-  secret_key: ""
+  access_key: "kGUva6PjabiSsCcLd4Fr"
+  secret_key: "IO9MlxjtoPk1sjljqY2hoY6stBseMRRSsCRBlyOP"

@@ -2,10 +2,10 @@ package jwt_manager
 
 import (
 	"errors"
-	"fmt"
+	"time"
+
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/hako/durafmt"
-	"time"
 )
 
 var JwtAlgorithm = jwt.SigningMethodHS512
@@ -39,10 +39,6 @@ func NewJwtManager(secretKey string, expire string) *JwtManager {
 		secretKey: secretKey,
 		ttl:       expireDuration.Duration(),
 	}
-}
-
-func (s JwtManager) sampleGo() {
-	fmt.Println("Hello")
 }
 
 func (s JwtManager) Generate(tokenType string, userID string) (string, error) {

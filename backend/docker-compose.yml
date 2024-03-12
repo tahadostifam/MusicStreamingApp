@@ -7,13 +7,16 @@ services:
         POSTGRES_PASSWORD: "admin"
     network_mode: "host"
   minio:
-    image: minio/minio
-    ports:
-      - "9000:9000"
-      - "9001:9001"
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: admin
-      MINIO_ROOT_PASSWORD: admin
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - ./minio_data:/data
+    ports:
+      - 9000:9000
+      - 9001:9001
   app:
     container_name: "music_streaming_app"
     build:

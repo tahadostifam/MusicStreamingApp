@@ -9,18 +9,19 @@ import (
 
 type Music struct {
 	gorm.Model `gorm:"primary_key"`
-	MusicID    uuid.UUID `gorm:"not null; unique"`
-	ArtistID   uuid.UUID `gorm:"not null;"`
-	Title      string    `gorm:"not null"`
-	Genre      string
+	MusicID    string        `gorm:"not null; unique"`
+	ArtistID   string        `gorm:"not null;"`
+	Title      string        `gorm:"not null"`
+	Genre      string        `gorm:"not null"`
 	Duration   time.Duration `gorm:"not null"`
+	FileName   string        `gorm:"not null"`
 	Plays      int           `gorm:"default:0"`
 
 	Comments []Comment `gorm:"many2many:music_comments;joinForeignKey:MusicID"`
 }
 
 func (m *Music) BeforeCreate(tx *gorm.DB) (err error) {
-	m.MusicID = uuid.New()
+	m.MusicID = uuid.NewString()
 
 	return nil
 }

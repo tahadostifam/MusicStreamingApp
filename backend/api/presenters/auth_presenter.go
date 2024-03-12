@@ -1,10 +1,11 @@
 package presenters
 
 import (
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	"github.com/tahadostifam/MusicStreamingApp/api/models"
 	"github.com/tahadostifam/MusicStreamingApp/api/services"
-	"net/http"
 )
 
 type UserDto struct {
@@ -26,22 +27,24 @@ func IncorrectPassword(ctx *gin.Context) {
 	code := http.StatusUnauthorized
 
 	ctx.JSON(code, JsonMessage{
-		Code:    401,
+		Code:    code,
 		Message: services.ErrIncorrectPassword.Error(),
 	})
 }
 
 func SendUser(ctx *gin.Context, user *models.User) {
-	ctx.JSON(http.StatusOK, UserDto{
+	code := http.StatusOK
+	ctx.JSON(code, UserDto{
 		Message: "Success",
-		Code:    200,
+		Code:    code,
 		User:    user,
 	})
 }
 
 func EmailAlreadyExist(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, JsonMessage{
+	code := http.StatusConflict
+	ctx.JSON(code, JsonMessage{
 		Message: "Another account already exists with the same email address",
-		Code:    409, // conflict
+		Code:    code,
 	})
 }

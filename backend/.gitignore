@@ -1,4 +1,7 @@
-build/
+.vscode/
 .idea/
-.vscode
+build/
 tmp/
+minio_data/
+logs/
+sample.go

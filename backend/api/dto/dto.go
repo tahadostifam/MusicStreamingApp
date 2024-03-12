@@ -1,8 +1,9 @@
 package dto
 
 import (
-	"github.com/tahadostifam/MusicStreamingApp/api/presenters"
 	"net/http"
+
+	"github.com/tahadostifam/MusicStreamingApp/api/presenters"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"

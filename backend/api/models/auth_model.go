@@ -8,7 +8,7 @@ import (
 
 type User struct {
 	gorm.Model `gorm:"primary_key"`
-	UserID     uuid.UUID `gorm:"not null;unique"`
+	UserID     string `gorm:"not null;unique"`
 	Name       string
 	Email      string `gorm:"unique"`
 	Password   string `gorm:"not null"`
@@ -18,7 +18,7 @@ type User struct {
 }
 
 func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
-	u.UserID = uuid.New()
+	u.UserID = uuid.NewString()
 	u.Password = encrypt_password.EncryptPassword(u.Password)
 
 	return nil
