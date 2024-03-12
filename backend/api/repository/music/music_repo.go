@@ -37,13 +37,13 @@ func (r *Repository) Create(artistID, title, genre, fileName string, plays int, 
 }
 
 func (r *Repository) FindByMusicID(musicID string) (*models.Music, error) {
-	music := models.Music{}
-	tx := r.db.Where("music_id = ?", musicID).Find(&music)
-	if tx.Error != nil {
+	music := &models.Music{}
+	tx := r.db.Where("music_id = ?", musicID).Find(music)
+	if tx.Error != nil || music.MusicID == "" {
 		return nil, ErrMusicNotFound
 	}
 
-	return &music, nil
+	return music, nil
 }
 
 func (r *Repository) FindByMusicFileName(fileName string) (*models.Music, error) {

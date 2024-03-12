@@ -64,6 +64,7 @@ func (s *MyTestSuite) TestB_FindByMusicID() {
 	assert.NoError(s.T(), err)
 	assert.NotEmpty(s.T(), music)
 	assert.Equal(s.T(), s.sampleMusic.MusicID, music.MusicID)
+	assert.Equal(s.T(), s.sampleMusic.ArtistID, music.ArtistID)
 }
 
 func (s *MyTestSuite) TestC_Update() {

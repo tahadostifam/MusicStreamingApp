@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tahadostifam/MusicStreamingApp/api/dto"
@@ -101,8 +100,6 @@ func (c *AuthController) Authenticate(ctx *gin.Context, callback func(user *mode
 		claims, err := c.jwtManager.Verify(accessToken, AccessToken)
 		if err == nil && claims != nil {
 			user, fetchErr := c.authService.FetchByUserID(claims.UserID)
-			fmt.Println(user)
-			fmt.Println(fetchErr)
 			if fetchErr != nil {
 				presenters.Unauthorized(ctx)
 				return

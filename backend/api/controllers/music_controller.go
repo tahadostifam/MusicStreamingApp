@@ -94,6 +94,9 @@ func (c *MusicController) HandleDeleteMusic(ctx *gin.Context) {
 		if errors.Is(err, services.ErrOnlyUserCan) {
 			presenters.ErrOnlyUserCan(ctx)
 			return
+		} else if errors.Is(err, services.ErrMusicFileNotFound) {
+			presenters.MusicNotFound(ctx)
+			return
 		} else if err != nil {
 			presenters.ServerError(ctx)
 			return

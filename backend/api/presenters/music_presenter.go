@@ -45,7 +45,7 @@ func MusicAdded(ctx *gin.Context, music *models.Music) {
 func MusicDeleted(ctx *gin.Context) {
 	code := http.StatusOK
 
-	ctx.JSON(code, MusicDto{
+	ctx.JSON(code, JsonMessage{
 		Code:    code,
 		Message: "Music deleted",
 	})

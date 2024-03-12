@@ -74,7 +74,7 @@ func (c MusicService) DeleteMusic(artistID, musicID string) error {
 
 	music, findMusicErr := c.musicRepo.FindByMusicID(musicID)
 	if findMusicErr != nil {
-		return findMusicErr
+		return ErrMusicFileNotFound
 	}
 
 	if user.UserID != music.ArtistID {
