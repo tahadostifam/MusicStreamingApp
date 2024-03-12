@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/tahadostifam/MusicStreamingApp/api/dto"
+	"github.com/tahadostifam/MusicStreamingApp/api/models"
 	"github.com/tahadostifam/MusicStreamingApp/api/presenters"
 	"github.com/tahadostifam/MusicStreamingApp/api/repository/auth"
 	"github.com/tahadostifam/MusicStreamingApp/api/services"
@@ -39,7 +40,7 @@ func (c *AuthController) HandleSignin(ctx *gin.Context) {
 		}
 
 		//everything is ok from client side
-		token, tokenErr := c.jwtManager.Generate(AccessToken, user.UserID.String())
+		token, tokenErr := c.jwtManager.Generate(AccessToken, user.UserID)
 		if tokenErr != nil {
 			presenters.ServerError(ctx)
 			return
@@ -73,7 +74,7 @@ func (c *AuthController) HandleSignup(ctx *gin.Context) {
 		}
 
 		// ready to generate access token and deliver it to client
-		token, tokenErr := c.jwtManager.Generate(AccessToken, user.UserID.String())
+		token, tokenErr := c.jwtManager.Generate(AccessToken, user.UserID)
 		if tokenErr != nil {
 			presenters.ServerError(ctx)
 			return
@@ -87,24 +88,34 @@ func (c *AuthController) HandleSignup(ctx *gin.Context) {
 	ctx.Next()
 }
 
-func (c *AuthController) HandleAuthentication(ctx *gin.Context) {
+func (c *AuthController) HandleLogout(ctx *gin.Context) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (c *AuthController) Authenticate(ctx *gin.Context, callback func(user *models.User)) {
 	accessToken := ctx.GetHeader(AuthenticationHeaderKey)
 
 	if len(accessToken) > 0 {
 		claims, err := c.jwtManager.Verify(accessToken, AccessToken)
-
-		if err == nil && claims != nil {
+		if err != nil && claims != nil {
 			user, fetchErr := c.authService.FetchByUserID(claims.UserID)
 			if fetchErr != nil {
 				presenters.Unauthorized(ctx)
 				return
 			}
 
-			presenters.SendUser(ctx, user)
+			callback(user)
 		} else {
 			presenters.Unauthorized(ctx)
 		}
 	}
+}
+
+func (c *AuthController) HandleAuthentication(ctx *gin.Context) {
+	c.Authenticate(ctx, func(user *models.User) {
+		presenters.SendUser(ctx, user)
+	})
 
 	ctx.Next()
 }

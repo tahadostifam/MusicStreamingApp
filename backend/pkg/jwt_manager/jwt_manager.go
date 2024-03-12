@@ -66,10 +66,6 @@ func (c JwtManager) Verify(userToken string, tokenType string) (*JwtClaims, erro
 	}
 
 	if token.Valid {
-		if claims.TokenType != tokenType {
-			return nil, ErrInvalidTokenType
-		}
-
 		return claims, nil
 	}
 
